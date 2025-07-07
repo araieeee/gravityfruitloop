@@ -1,2 +1,2 @@
-# gravityfruitloop
-Roblox Studio Gravity Fruit Loop Script
+# gravityfruitfanmade
+Roblox Studio Gravity Fruit FanMade Loop
