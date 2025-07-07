@@ -1,0 +1,54 @@
+-- File: GravityFruitLoop.lua
+-- Description: Periodically lifts nearby enemies into the air using gravity force.
+
+-- Settings
+local GRAVITY_RADIUS = 20
+local LIFT_HEIGHT = 25
+local COOLDOWN = 3 -- seconds
+local LIFT_DURATION = 1.5 -- seconds
+
+-- Gravity Effect Function
+local function gravityBurst(player)
+	local char = player.Character
+	if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
+	local hrp = char.HumanoidRootPart
+
+	while true do
+		wait(COOLDOWN)
+		
+		for _, model in ipairs(workspace:GetChildren()) do
+			if model ~= char and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
+				local dist = (model.HumanoidRootPart.Position - hrp.Position).Magnitude
+				if dist <= GRAVITY_RADIUS then
+					
+					-- Apply force upwards
+					local bodyVel = Instance.new("BodyVelocity")
+					bodyVel.Velocity = Vector3.new(0, LIFT_HEIGHT, 0)
+					bodyVel.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+					bodyVel.P = 1e5
+					bodyVel.Parent = model.HumanoidRootPart
+					
+					game.Debris:AddItem(bodyVel, LIFT_DURATION)
+					
+					-- Optional: Visual effect
+					local ring = Instance.new("ParticleEmitter")
+					ring.Texture = "rbxassetid://2418769697" -- Energy ring texture
+					ring.Lifetime = NumberRange.new(0.3)
+					ring.Rate = 50
+					ring.Speed = NumberRange.new(0)
+					ring.Parent = model.HumanoidRootPart
+					game.Debris:AddItem(ring, 0.5)
+				end
+			end
+		end
+	end
+end
+
+-- Hook to player
+game.Players.PlayerAdded:Connect(function(player)
+	player.CharacterAdded:Connect(function()
+		wait(1)
+		gravityBurst(player)
+	end)
+end)
