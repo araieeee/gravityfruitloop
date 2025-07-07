@@ -1,2 +1,2 @@
-# gravityfruitfanmade
-Roblox Studio Gravity Fruit FanMade Loop
+# if youre close the the dummy, it flies
+Roblox Studio Only
